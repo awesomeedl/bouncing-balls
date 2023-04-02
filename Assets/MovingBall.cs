@@ -4,35 +4,42 @@ using UnityEngine;
 
 public class MovingBall : MonoBehaviour
 {
-    public const int MAX_X = 5, MIN_X = -5;
-    public const int MAX_Y = 5, MIN_Y = -5;
-    
-    private Vector2 direction;
+    private float MaxX, MinX;
+    private float MaxY, MinY;
+
+    private Vector2 _direction;
+
+    public TrailRenderer trail;
 
     void Start()
     {
-        direction = new Vector2
-        {
-            x = Random.Range(-1.0f, 1.0f),
-            y = Random.Range(-1.0f, 1.0f)
-        };
+        Camera main = Camera.main;
+        var botLeft = main.ViewportToWorldPoint(new Vector3(0, 0, main.nearClipPlane));
+        var topRight = main.ViewportToWorldPoint(new Vector3(1, 1, main.nearClipPlane));
+
+        MinX = botLeft.x;
+        MinY = botLeft.y;
+        MaxX = topRight.x;
+        MaxY = topRight.y;
+        
+        _direction = Random.insideUnitCircle.normalized;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (transform.position.x > MAX_X || transform.position.x < MIN_X)
+        if (transform.position.x > MaxX || transform.position.x < MinX)
         {
-            direction.x *= -1;
+            _direction.x *= -1;
         }
         
-        if (transform.position.y > MAX_Y || transform.position.y < MIN_Y)
+        if (transform.position.y > MaxY || transform.position.y < MinY)
         {
-            direction.y *= -1;
+            _direction.y *= -1;
         }
 
-        float speed = FindObjectOfType<BallManager>().ballSpeed;
+        var speed = BallManager.ballSpeed;
         
-        transform.Translate(direction * Time.deltaTime * speed);
+        transform.Translate(_direction * (Time.deltaTime * speed));
     }
 }

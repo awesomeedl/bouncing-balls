@@ -4,28 +4,78 @@ using UnityEngine;
 
 public class BallManager : MonoBehaviour
 {
-    private List<GameObject> balls;
+    private const int maxBallCount = 50;
+    private const float maxBallSpeed = 20f;
+    private const float maxBallSize = 2f;
+    private const float maxBallTrail = 2f;
+    private List<MovingBall> balls = new List<MovingBall>();
 
-    public GameObject ballTemplate;
+    public MovingBall ballTemplate;
 
-    [Range(1, 500)] public int ballCount = 10;
+    public static int ballCount = 10;
     
-    [Range(1.0f, 10.0f)]
-    public float ballSpeed = 1.0f;
+    public static float ballSpeed = 1.0f;
+
+    public SliderController ballCountController;
+    public SliderController ballSpeedController;
+    public SliderController ballSizeController;
+    public SliderController ballTrailController;
+
+    public void BallTrailChanged(float value)
+    {
+        foreach (var ball in balls)
+        {
+            ball.trail.time = value;
+        }
+    }
     
+    public void BallSizeChanged(float value)
+    {
+        foreach (var ball in balls)
+        {
+            ball.transform.localScale = new Vector3(value, value, 1);
+
+            ball.trail.startWidth = value * 0.9f;
+            ball.trail.endWidth = value * 0.9f;
+        }
+    }
+
+    public void BallSpeedChanged(float value)
+    {
+        ballSpeed = value;
+    }
+    
+    public void BallCountChanged(float value)
+    {
+        var count = (int)value;
+        
+        ballCount = count;
+        for (int i = 0; i < count; i++)
+        {
+            balls[i].gameObject.SetActive(true);
+        }
+
+        for (int i = count; i < maxBallCount; i++)
+        {
+            balls[i].gameObject.SetActive(false);
+        }
+    }
     
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < ballCount; i++)
+        
+        for (int i = 0; i < maxBallCount; i++)
         {
-            Instantiate(ballTemplate);
+            var ball = Instantiate<MovingBall>(ballTemplate);
+            balls.Add(ball);
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
+        ballCountController.Init(1, maxBallCount);
+        ballSpeedController.Init(0.1f, maxBallSpeed);
+        ballSizeController.Init(0.1f, maxBallSize);
+        ballTrailController.Init(0f, maxBallTrail);
+        
         
     }
 }
