@@ -230,3 +230,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trail: {fileID: 1600780467444817050}
+  _collider2D: {fileID: 0}
+  _rigidbody2D: {fileID: 0}

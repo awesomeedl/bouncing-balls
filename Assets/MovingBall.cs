@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MovingBall : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class MovingBall : MonoBehaviour
     private Vector2 _direction;
 
     public TrailRenderer trail;
-
+    
     void Start()
     {
         Camera main = Camera.main;
@@ -28,18 +30,12 @@ public class MovingBall : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (transform.position.x > MaxX || transform.position.x < MinX)
+        var v = (Vector2)transform.position;
+        if (v.magnitude > 5)
         {
-            _direction.x *= -1;
+            _direction = Vector2.Reflect(_direction, -(v.normalized));
         }
         
-        if (transform.position.y > MaxY || transform.position.y < MinY)
-        {
-            _direction.y *= -1;
-        }
-
-        var speed = BallManager.ballSpeed;
-        
-        transform.Translate(_direction * (Time.deltaTime * speed));
+        transform.Translate(_direction * (BallManager.ballSpeed * Time.deltaTime));
     }
 }

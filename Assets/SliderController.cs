@@ -17,20 +17,24 @@ public class SliderController : MonoBehaviour
     
     public void Init(float minValue, float maxValue)
     {
+        
         _slider.maxValue = maxValue;
         _slider.minValue = minValue;
-
+        _slider.SetValueWithoutNotify(minValue);
+        
     }
 
     public void Init(int minValue, int maxValue)
     {
+        
         _slider.wholeNumbers = true;
         _slider.maxValue = maxValue;
         _slider.minValue = minValue;
+        _slider.SetValueWithoutNotify(minValue);
     }
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _slider ??= GetComponent<Slider>();
     }

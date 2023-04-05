@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
 
 public class BallManager : MonoBehaviour
 {
+    public const float canvasRadius = 4;
+    
+    
     private const int maxBallCount = 50;
     private const float maxBallSpeed = 20f;
     private const float maxBallSize = 2f;
@@ -67,7 +71,7 @@ public class BallManager : MonoBehaviour
         
         for (int i = 0; i < maxBallCount; i++)
         {
-            var ball = Instantiate<MovingBall>(ballTemplate);
+            var ball = Instantiate<MovingBall>(ballTemplate, Random.insideUnitCircle * 4, Quaternion.identity);
             balls.Add(ball);
         }
 
