@@ -31,7 +31,7 @@ public class MovingBall : MonoBehaviour
     private void Update()
     {
         var v = (Vector2)transform.position;
-        if (v.magnitude > 5)
+        if (v.magnitude > 4.5)
         {
             _direction = Vector2.Reflect(_direction, -(v.normalized));
         }
